@@ -17,4 +17,3 @@ class Bomb:
         :return: list of lists with the differnet cells for the blast in each frame
         """
 
-        hello world
