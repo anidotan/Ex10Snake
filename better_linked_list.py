@@ -125,18 +125,3 @@ class Linked_list:
 
     def get_head(self):
         return self.head
-
-
-if __name__ == '__main__':
-    cell_1 = Node((10, 10))
-    cell_2 = Node((10, 9))
-    cell_3 = Node((10, 8))
-    # creating the snake himself
-    the_snake = Linked_list()
-    the_snake.add_to_end(cell_1)
-    the_snake.add_to_end(cell_2)
-    the_snake.add_to_end(cell_3)
-    # print(the_snake.all_nodes_as_list())
-
-    the_snake.remove_last()
-    print(the_snake.all_nodes_as_list())

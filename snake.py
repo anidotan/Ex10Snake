@@ -103,16 +103,3 @@ class Snake:
             new_head_node = Node(tuple((x + 1, y)))
             self.the_snake.add_to_start(new_head_node)
             self.the_snake.remove_last()
-
-
-
-if __name__ == '__main__':
-    snake1 = Snake()
-    # print(snake1.head)
-    # print(type(snake1.head))
-    # print(snake1.tail)
-    # print(snake1.length)
-    # print(snake1.coordinates)
-    print("1", snake1.the_snake)
-    snake1.forward_head_only("Right")
-    print(snake1)
