@@ -13,7 +13,12 @@ class Board:
         self.__board = {'snake': snake_loc, 'apples': apples, 'bombs': bombs,
                         'explosion': []}
 
-    def set_explosions(self, explosion_loc):
+    def set_explosions(self, explosion_loc: List[Tuple[int,int]]) -> None:
+        """
+        sets the explosion locations list
+        :param explosion_loc:
+        :return: None
+        """
         self.__board['explosion'] = explosion_loc
 
     def is_valid_board(self) -> bool:
@@ -34,13 +39,12 @@ class Board:
             if loc not in self.__locations:
                 return False
             # check if the snake touched an explosion
-            elif set(snake_loc).intersection(set(explosion_loc)) == 0:
+            elif len(set(snake_loc).intersection(set(explosion_loc))) == 0 and len(explosion_loc) != 0:
                 return False
             # check if the snake touched a bomb
-            elif set(snake_loc).intersection(set(bombs_loc)) == 0:
+            elif len(set(snake_loc).intersection(set(bombs_loc))) == 0 and len(explosion_loc) != 0:
                 return False
             # check id the snake touched itself
             elif len(set(snake_loc)) != len(snake_loc):
                 return False
         return True
-
