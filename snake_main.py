@@ -37,7 +37,7 @@ def main_loop(gd: GameDisplay) -> None:
         elif (key_clicked == 'Down') and (y > 0):
             y -= 1
 
-
+        gd.draw_cell(12, 13, "green")
         gd.draw_cell(x, y, "red")
         gd.end_round()
 

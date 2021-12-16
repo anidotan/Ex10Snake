@@ -7,18 +7,19 @@ class Snake:
     """
 
     def __init__(self):
-        self.__x = x
-        self.__y = y
-        self.__radius = radius
-        self.__time = time
+        self.head = head
+        self.tail = tail
+        self.length = len(self.coordinates)
+        self.coordinates = []
 
-    def eat_apple(self):
+
+    def foriwrd_had_only(self):
         """
         adds three cells
         :return:
         """
 
-    def move(self):
+    def delete_last_add_head(self):
         """
         move one forword
         :return:
