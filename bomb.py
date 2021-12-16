@@ -11,9 +11,8 @@ class Bomb:
         self.__radius = radius
         self.__time = time
 
-    def explosiom(self, time):
+    def explosion(self, time):
         """
 
-        :return: according to the time given, explode the bomb ad send the
-        relevant blast signals
+        :return: list of lists with the differnet cells for the blast in each frame
         """
