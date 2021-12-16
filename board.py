@@ -13,14 +13,8 @@ class Board:
         self.__board = {'snake': snake_loc, 'apples': apples, 'bombs': bombs,
                         'explosion': []}
 
-    # todo: do i need this?
-    def __create_location_list(self) -> None:
-        """
-        creates all possible location on the board as a list of tupples.
-        :return:
-        """
-        self.__locations = [(x, y) for x in range(self.__width) for y in
-                            range(self.__height)]
+    def set_explosions(self, explosion_loc):
+        self.__board['explosion'] = explosion_loc
 
     def is_valid_board(self) -> bool:
         # checks if the board is valid according to all of the edge cases
