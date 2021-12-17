@@ -10,7 +10,8 @@ class Board:
         self.__width = width
         self.__locations = [(x, y) for x in range(self.__width) for y in
                             range(self.__height)]
-        self.__board = {'snake': snake_loc, 'apples': apples, 'bombs': bombs,
+        # todo: change name
+        self.__board_dict = {'snake': snake_loc, 'apples': apples, 'bombs': bombs,
                         'explosion': []}
 
     def set_explosions(self, explosion_loc: List[Tuple[int,int]]) -> None:
@@ -19,7 +20,7 @@ class Board:
         :param explosion_loc:
         :return: None
         """
-        self.__board['explosion'] = explosion_loc
+        self.__board_dict['explosion'] = explosion_loc
 
     def is_valid_board(self) -> bool:
         # checks if the board is valid according to all of the edge cases
@@ -31,9 +32,9 @@ class Board:
         4. snake didn't touch explosion
         :return: bool
         """
-        snake_loc = self.__board['snake']
-        explosion_loc = self.__board['explosion']
-        bombs_loc = self.__board['bombs']
+        snake_loc = self.__board_dict['snake']
+        explosion_loc = self.__board_dict['explosion']
+        bombs_loc = self.__board_dict['bombs']
         for loc in snake_loc:
             # check if the snake is inside the board
             if loc not in self.__locations:
@@ -48,3 +49,9 @@ class Board:
             elif len(set(snake_loc)) != len(snake_loc):
                 return False
         return True
+
+    def get_board(self):
+        return self.__board_dict
+
+    def set_board(self, new_board):
+        self.__board_dict = new_board

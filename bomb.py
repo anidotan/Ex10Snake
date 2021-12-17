@@ -13,6 +13,6 @@ class Bomb:
 
     def explosion(self, time):
         """
-
+        List[List[Tuple
         :return: list of lists with the differnet cells for the blast in each frame
         """
