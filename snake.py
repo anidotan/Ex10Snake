@@ -1,12 +1,18 @@
-import game_parameters
-import pytest
-# from linked_list import Node, LinkedList
 from better_linked_list import *
 
 
 class Snake:
     """
-    contains a list of all the cells a snake is in
+    creates a snake instance for the game of snake
+    starts in the length of 3, facing up and its head in cell (10,10)
+
+    methods:
+    forward head only - for the times when a snake eats an apple his body
+                        stays in the same place and only its head continue
+                        moving forward so that his body is actually growing
+    simple move - when the snake is just moving - deletes its last cell and
+                puts a new want in front of the snake, according to its moving
+                direction
     """
 
     def __init__(self):
@@ -20,28 +26,12 @@ class Snake:
         self.the_snake.add_to_end(cell_2)
         self.the_snake.add_to_end(cell_3)
 
-        # self.the_snake.add_to_start(cell_1)
-        # temp_snake.add_to_start(cell_1)
-        # temp_snake.add_to_end(cell_2)
-        # temp_snake.add_to_end(cell_3)
-        # print(f'after printing:{temp_snake}')
-        # self.the_snake = temp_snake
-        # print(self.the_snake == temp_snake)
-        # print(f'type: {type(self.the_snake)}')
-        # print(f'the snake {self.the_snake}')
-
-        # self.head: tuple = self.the_snake.head.value
-        # self.tail: tuple = self.the_snake.tail.value
-        # self.coordinates: list = self.the_snake.all_nodes_as_list()
-        # self.length = self.the_snake.count
-
     def __str__(self):
-       return str(self.the_snake)
+        return str(self.the_snake)
 
     def forward_head_only(self, direction):
         """
-        adds three cells
-        :return:
+        adds a cell in front of the head without moving the body
         """
         if direction == "Up":
             cur_head_cell = self.the_snake.head.value
@@ -67,13 +57,10 @@ class Snake:
             new_head_node = Node(tuple((x + 1, y)))
             self.the_snake.add_to_start(new_head_node)
 
-
-
     def simple_move(self, direction):
         """
-        move one forward
-
-        :return: delete last cell and add new one to head
+        deletes the last cell and adds a new one in front of it according to
+        the moving direction
         """
         # todo: add possible moves
         if direction == "Up":
