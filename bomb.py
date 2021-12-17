@@ -49,7 +49,7 @@ class Bomb:
 
         return list_of_frames
 
-    def waiting_frames(self):
+    def waiting_frames(self) -> list[tuple]:
         """
         :return: list of the bomb location as tuple. number of repetitions
                 is in accordance to the number of rounds until the bomb explodes
