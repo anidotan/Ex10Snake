@@ -67,7 +67,6 @@ def main_loop(gd: GameDisplay) -> None:
 
         # start by printing the screen
         dict_of_colors = game_board.get_board()
-        print("the dict", dict_of_colors)
         # unpack the colors
         for color in dict_of_colors:
             list_cells = dict_of_colors[color]
@@ -78,7 +77,7 @@ def main_loop(gd: GameDisplay) -> None:
 
         key_clicked = gd.get_key_clicked()
         cur_key = get_key(key_clicked, key_before)
-        current_board = game_board.update_board(cur_key)  # remove
+        game_board.update_board(cur_key)  # remove
 
         new_score = game_board.get_score()  # get the new score
         gd.show_score(new_score)  # updates the score display

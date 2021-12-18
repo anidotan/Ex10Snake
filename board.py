@@ -22,11 +22,6 @@ class Board:
         colors = ['green', 'black', 'red', 'orange']
         self.__board_dict = {c: [] for c in colors}
 
-
-
-    # def __str__(self):
-    #     return str(f'snake: {self.__snake} apples: {self.__apples}')
-
     def initialize_board(self):
         """
         create first board-frame
@@ -55,16 +50,20 @@ class Board:
                 self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
                 self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
 
-        # todo: remove this print
-        print('done initializing board')
-
-
     def get_score(self):
         return self.__score
 
-
     def get_all_apple_locations(self):
         return [apple.get_location() for apple in self.__apple_instances_set]
+
+    def can_place_obj(self, loc: Tuple[int,int]):
+        all_loc = []
+        all_loc.extend(self.get_all_apple_locations())
+        all_loc.extend(self.__snake.get_all_coor())
+        all_loc.extend(self.__board_dict['red'])
+        all_loc.extend(self.__board_dict['orange'])
+        # todo: test this
+        return loc in all_loc
 
     def update_board(self, key):
         # move snake - no apple
@@ -74,28 +73,22 @@ class Board:
 
         # move snake while eating apple
         elif self.__eating_counter > 0:
-            print('snake is eating')
             self.__snake.forward_head_only(key)
             self.__eating_counter -= 1
 
         # advance bomb or explosion
-        print("zuk the bomb- all static", self.__all_static_bomb_loc)
-        print("zuk the bomb- dynamin", self.__all_explosion_loc)
         if len(self.__all_static_bomb_loc) > 0:
 
             current_loc = self.__all_static_bomb_loc.pop()
             self.__board_dict['red'] = [current_loc]
         elif len(self.__all_explosion_loc) > 0:
-
             explosion_loc = self.__all_explosion_loc.pop(0)
-
             for apple in self.__apple_instances_set:
                 if apple.get_location() in explosion_loc:
                     apple.move_apple()
-
+            #         todo: move apple until it has a valid place
             self.__board_dict['orange'] = explosion_loc
-
-
+            self.__board_dict['red'] = []
         else:  # add new bomb
             new_bomb = Bomb()
             new_location = new_bomb.get_location()
@@ -104,43 +97,20 @@ class Board:
                 self.__bomb_instance = new_bomb
                 self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
                 self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
-
-        """
-        if len(self.__all_static_bomb_loc) >= 0 and len(self.__all_explosion_loc) > 0:
-            if len(self.__all_static_bomb_loc) > 0:
-                current_loc = self.__all_static_bomb_loc.pop()
-                self.__board_dict['red'] = [current_loc]
-            else:
-                explosion_loc = self.__all_explosion_loc.pop(0)
-                for apple in self.__apples:
-                    if apple.get_location() in explosion_loc:
-                        apple.move_apple()
-                        
-                self.__board_dict['orange'] = explosion_loc
-        
-        # add new bomb
-        elif len(self.__all_static_bomb_loc) == 0 and len(self.__all_explosion_loc) == 0:
-            new_bomb = Bomb()
-            new_location = new_bomb.get_location()
-        """
+                self.__board_dict['orange'] = []
+                self.__board_dict['red'] = [self.__all_static_bomb_loc[0]]
 
         # eating apple
         apple_to_remove = None
         snake_head = self.__snake.get_head()
         for apple in self.__apple_instances_set:
-            # print(type(apple.get_location()))
-            # print(type(snake_head))
             if apple.get_location() == snake_head:
                 self.__eating_counter += 3
-                # print(f'eating ...{self.__eating_counter}')
                 apple_to_remove = apple
                 self.__score += apple.get_apple_score()
 
-        # todo: take this off?
         # new apple in case we ate one
-        # print('apple:', apple_to_remove)
         if apple_to_remove is not None:
-            # print(f'{apple_to_remove in self.__apple_instances_set}')
             self.__apple_instances_set.remove(apple_to_remove) # removing the old
             # find new apple to add  todo if there is no more room - the game is finished
             apple_placed = False
@@ -152,15 +122,13 @@ class Board:
                         and new_location not in self.__board_dict['orange'] \
                         and new_location not in self.__board_dict['red']:
                     self.__apple_instances_set.add(new_apple)
+                apple_to_remove = None
                 apple_placed = True
 
         self.__board_dict['green'] = self.get_all_apple_locations()
-
         self.__board_dict['black'] = self.__snake.get_all_coor()
 
-        print(self.__board_dict)
-        return self.__board_dict
-
+        # return self.__board_dict
 
     def is_valid_board(self) -> bool:
         """
@@ -188,7 +156,7 @@ class Board:
             return False
 
         # check if the snake touched an explosion
-        elif list_orange and head_of_snake in list_orange:
+        elif list_orange and len(set(snake_loc).intersection(set(list_orange))) > 0:
             return False
 
         # check if the snake touched itself
@@ -197,20 +165,6 @@ class Board:
         return True
 
     def get_board(self):
-        # print("bomb list static", self.__all_static_bomb_loc)
-        # print("bomb instacne", self.__bomb_instance)
-        # print("bomb explosions", self.__all_explosion_loc)
-        # print("snake coordinates", self.__snake.get_all_coor())
-        # print("apples locations", self.get_all_apple_locations())
-
-
-
-        # self.__bord_dict = {}
-        # self.__board_dict['black'] = self.__snake.get_all_coor()
-        # self.__board_dict['red'] = self.__all_static_bomb_loc
-        # self.__board_dict['orange'] = []
-        # selaf.__board_dict['green'] = self.get_all_apple_locations()
-
         return self.__board_dict
 
 
