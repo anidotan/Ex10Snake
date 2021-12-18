@@ -66,13 +66,14 @@ def main_loop(gd: GameDisplay) -> None:
         gd.show_score(new_score)  # updates the score display
 
         dict_of_colors = game_board.get_board()  # todo might change
-        print(dict_of_colors)
+        print(dict_of_colors)  # remove
         # unpack the colors
         for color in dict_of_colors:
             list_cells = dict_of_colors[color]
-            for location_tuple in list_cells:
-                x, y = location_tuple
-                gd.draw_cell(x, y, color)
+            if list_cells:
+                for location_tuple in list_cells:
+                    x, y = location_tuple
+                    gd.draw_cell(x, y, color)
 
         # check if the game have been finished
         # continue_game = game_board.is_valid_board()  # todo
