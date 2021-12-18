@@ -27,7 +27,7 @@ class Snake:
         self.the_snake.add_to_end(cell_3)
 
     def __str__(self):
-        return str(self.the_snake)
+        return str(self.the_snake.all_nodes_as_list())
 
     def forward_head_only(self, direction):
         """
@@ -90,3 +90,21 @@ class Snake:
             new_head_node = Node(tuple((x + 1, y)))
             self.the_snake.add_to_start(new_head_node)
             self.the_snake.remove_last()
+
+    def get_all_coor(self):
+        """
+        :return: all of the coordinates of the snake as a list[tuple(x,y)]
+        """
+        return self.the_snake.all_nodes_as_list()
+
+    def get_head(self):
+        """
+        :return: tuple(x, y) of the snakes head location
+        """
+        return self.the_snake.head
+
+
+if __name__ == '__main__':
+    zuk = Snake()
+    zuk.simple_move("Up")
+    print(zuk.get_head())

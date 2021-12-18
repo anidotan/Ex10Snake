@@ -55,7 +55,7 @@ def old_main_loop(gd: GameDisplay) -> None:
 def main_loop(gd: GameDisplay) -> None:
     gd.show_score(0)
     key_before = "Up"
-    game_board = Board()
+    game_board = Board(30, 40)
     continue_game = True
     while continue_game:
         key_clicked = gd.get_key_clicked()
@@ -65,7 +65,8 @@ def main_loop(gd: GameDisplay) -> None:
         new_score = game_board.get_score()  # get the new score
         gd.show_score(new_score)  # updates the score display
 
-        dict_of_colors = game_board.update_board()
+        dict_of_colors = game_board.get_board()  # todo might change
+        print(dict_of_colors)
         # unpack the colors
         for color in dict_of_colors:
             list_cells = dict_of_colors[color]
@@ -74,7 +75,7 @@ def main_loop(gd: GameDisplay) -> None:
                 gd.draw_cell(x, y, color)
 
         # check if the game have been finished
-        continue_game = game_board.is_valid_board()
+        # continue_game = game_board.is_valid_board()  # todo
 
         # updates the key so the snake won't stop moving
         key_before = cur_key
