@@ -25,9 +25,10 @@ class Snake:
         self.the_snake.add_to_start(cell_1)
         self.the_snake.add_to_end(cell_2)
         self.the_snake.add_to_end(cell_3)
-
+    """
     def __str__(self):
         return str(self.the_snake.all_nodes_as_list())
+    """
 
     def forward_head_only(self, direction):
         """
@@ -101,10 +102,10 @@ class Snake:
         """
         :return: tuple(x, y) of the snakes head location
         """
-        return self.the_snake.head
+        return self.the_snake.head.value
 
-
+"""
 if __name__ == '__main__':
     zuk = Snake()
     zuk.simple_move("Up")
-    print(zuk.get_head())
+    print(zuk.get_head())"""

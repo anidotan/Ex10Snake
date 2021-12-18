@@ -1,4 +1,5 @@
-from game_parameters import get_random_bomb_data
+import game_parameters
+from game_parameters import get_random_bomb_data, WIDTH, HEIGHT
 
 
 class Bomb:
@@ -29,6 +30,9 @@ class Bomb:
         self.__radius = radius
         self.__time = time
 
+    def __str__(self):
+        return f'{(self.__x, self.__y, self.__radius, self.__time)}'
+
     def explosion_frames(self):
         """
         :return: list of lists with the different cells for the blast in each frame
@@ -40,17 +44,35 @@ class Bomb:
             right_x = self.__x + r
             upper_y = self.__y + r
             left_x = self.__x - r
+
+            bad_frame = False
             for i in range(r + 1):
+
                 a = tuple((self.__x + i, upper_y - i))
+                if self.__x + i < 0 or upper_y - i < 0 or self.__x + i > game_parameters.WIDTH - 1 or upper_y - i > game_parameters.HEIGHT - 1:
+                    bad_frame = True
+                    break
                 set_of_tuples_in_single_frame.add(a)
-                b = tuple((right_x - i , self.__y - i))
+                b = tuple((right_x - i, self.__y - i))
+                if right_x - i < 0 or self.__y - i < 0 or right_x - i > game_parameters.WIDTH - 1or self.__y - i > game_parameters.HEIGHT - 1:
+                    bad_frame = True
+                    break
                 set_of_tuples_in_single_frame.add(b)
-                c = tuple((self.__x - i , upper_y - i))
+                c = tuple((self.__x - i, upper_y - i))
+                if self.__x - i < 0 or upper_y - i < 0 or self.__x - i > game_parameters.WIDTH - 1 or upper_y - i > game_parameters.HEIGHT - 1:
+                    bad_frame = True
+                    break
                 set_of_tuples_in_single_frame.add(c)
                 d = tuple((left_x + i, self.__y - i))
+                if left_x + i < 0 or self.__y - i < 0 or left_x + i > game_parameters.WIDTH - 1 or self.__y - i > game_parameters.HEIGHT - 1:
+                    bad_frame = True
+                    break
                 set_of_tuples_in_single_frame.add(d)
 
-            list_of_frames.append(set_of_tuples_in_single_frame)
+            list_of_frames.append(list(set_of_tuples_in_single_frame))
+            if bad_frame:
+                list_of_frames.pop()
+                break
 
         return list_of_frames
 
@@ -71,3 +93,9 @@ class Bomb:
         :return: the location of the bomb as a tuple[x: int, y: int]
         """
         return tuple((self.__x, self.__y))
+
+if __name__ == '__main__':
+    bibi = Bomb()
+    print(bibi)
+    print(bibi.explosion_frames())
+    print(bibi.waiting_frames())
