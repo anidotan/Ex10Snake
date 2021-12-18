@@ -1,26 +1,92 @@
-import game_parameters
+from better_linked_list import *
 
 
 class Snake:
     """
-    contains a list of all the cells a snake is in
+    creates a snake instance for the game of snake
+    starts in the length of 3, facing up and its head in cell (10,10)
+
+    methods:
+    forward head only - for the times when a snake eats an apple his body
+                        stays in the same place and only its head continue
+                        moving forward so that his body is actually growing
+    simple move - when the snake is just moving - deletes its last cell and
+                puts a new want in front of the snake, according to its moving
+                direction
     """
 
     def __init__(self):
-        self.head = head
-        self.tail = tail
-        self.length = len(self.coordinates)
-        self.coordinates = []
+        # creating the snake first three cells
+        cell_1 = Node((10, 10))
+        cell_2 = Node((10, 9))
+        cell_3 = Node((10, 8))
+        # creating the snake himself
+        self.the_snake = Linked_list()
+        self.the_snake.add_to_start(cell_1)
+        self.the_snake.add_to_end(cell_2)
+        self.the_snake.add_to_end(cell_3)
 
+    def __str__(self):
+        return str(self.the_snake)
 
-    def foriwrd_had_only(self):
+    def forward_head_only(self, direction):
         """
-        adds three cells
-        :return:
+        adds a cell in front of the head without moving the body
         """
+        if direction == "Up":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x, y + 1)))
+            self.the_snake.add_to_start(new_head_node)
 
-    def delete_last_add_head(self):
+        elif direction == "Down":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x, y - 1)))
+            self.the_snake.add_to_start(new_head_node)
+
+        elif direction == "Left":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x - 1, y)))
+            self.the_snake.add_to_start(new_head_node)
+
+        elif direction == "Right":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x + 1, y)))
+            self.the_snake.add_to_start(new_head_node)
+
+    def simple_move(self, direction):
         """
-        move one forword
-        :return:
+        deletes the last cell and adds a new one in front of it according to
+        the moving direction
         """
+        # todo: add possible moves
+        if direction == "Up":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x, y + 1)))
+            self.the_snake.add_to_start(new_head_node)
+            self.the_snake.remove_last()
+
+        elif direction == "Down":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x, y - 1)))
+            self.the_snake.add_to_start(new_head_node)
+            self.the_snake.remove_last()
+
+        elif direction == "Left":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x - 1, y)))
+            self.the_snake.add_to_start(new_head_node)
+            self.the_snake.remove_last()
+
+        elif direction == "Right":
+            cur_head_cell = self.the_snake.head.value
+            x, y = cur_head_cell
+            new_head_node = Node(tuple((x + 1, y)))
+            self.the_snake.add_to_start(new_head_node)
+            self.the_snake.remove_last()
