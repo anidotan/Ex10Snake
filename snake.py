@@ -102,7 +102,7 @@ class Snake:
         """
         :return: tuple(x, y) of the snakes head location
         """
-        return self.the_snake.head
+        return self.the_snake.head.value
 
 """
 if __name__ == '__main__':

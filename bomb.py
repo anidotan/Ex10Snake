@@ -45,24 +45,32 @@ class Bomb:
             upper_y = self.__y + r
             left_x = self.__x - r
             for i in range(r + 1):
+
+                bad_frame = False
+
                 a = tuple((self.__x + i, upper_y - i))
                 if self.__x + i < 0 or upper_y - i < 0 or self.__x + i > game_parameters.WIDTH or upper_y - i > game_parameters.HEIGHT:
+                    bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(a)
                 b = tuple((right_x - i, self.__y - i))
                 if right_x - i < 0 or self.__y - i < 0 or right_x - i > game_parameters.WIDTH or self.__y - i > game_parameters.HEIGHT:
+                    bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(b)
                 c = tuple((self.__x - i, upper_y - i))
                 if self.__x - i < 0 or upper_y - i < 0 or self.__x - i > game_parameters.WIDTH or upper_y - i > game_parameters.HEIGHT:
+                    bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(c)
                 d = tuple((left_x + i, self.__y - i))
                 if left_x + i < 0 or self.__y - i < 0 or left_x + i > game_parameters.WIDTH or self.__y - i > game_parameters.HEIGHT:
+                    bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(d)
-
-            list_of_frames.append(set_of_tuples_in_single_frame)
+            if bad_frame:
+                break
+            list_of_frames.append(list(set_of_tuples_in_single_frame))
 
         return list_of_frames
 
@@ -86,5 +94,6 @@ class Bomb:
 
 if __name__ == '__main__':
     bibi = Bomb()
-    print(bibi.explosion_frames())
-    print(bibi.waiting_frames())
+    # print(bibi)
+    # print(bibi.explosion_frames())
+    # print(bibi.waiting_frames())

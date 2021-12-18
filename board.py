@@ -74,21 +74,27 @@ class Board:
 
         # move snake while eating apple
         elif self.__eating_counter > 0:
+            print('snake is eating')
             self.__snake.forward_head_only(key)
             self.__eating_counter -= 1
 
         # advance bomb or explosion
-        # todo: improve this if
+        print("zuk the bomb- all static", self.__all_static_bomb_loc)
+        print("zuk the bomb- dynamin", self.__all_explosion_loc)
         if len(self.__all_static_bomb_loc) > 0:
+
             current_loc = self.__all_static_bomb_loc.pop()
             self.__board_dict['red'] = [current_loc]
         elif len(self.__all_explosion_loc) > 0:
-            explosion_loc = list(self.__all_explosion_loc.pop(0))
+
+            explosion_loc = self.__all_explosion_loc.pop(0)
+
             for apple in self.__apple_instances_set:
                 if apple.get_location() in explosion_loc:
                     apple.move_apple()
 
             self.__board_dict['orange'] = explosion_loc
+
 
         else:  # add new bomb
             new_bomb = Bomb()
@@ -122,17 +128,21 @@ class Board:
         apple_to_remove = None
         snake_head = self.__snake.get_head()
         for apple in self.__apple_instances_set:
+            # print(type(apple.get_location()))
+            # print(type(snake_head))
             if apple.get_location() == snake_head:
                 self.__eating_counter += 3
+                # print(f'eating ...{self.__eating_counter}')
                 apple_to_remove = apple
                 self.__score += apple.get_apple_score()
 
         # todo: take this off?
         # new apple in case we ate one
+        # print('apple:', apple_to_remove)
         if apple_to_remove is not None:
+            # print(f'{apple_to_remove in self.__apple_instances_set}')
             self.__apple_instances_set.remove(apple_to_remove) # removing the old
-
-            # find new apple to add
+            # find new apple to add  todo if there is no more room - the game is finished
             apple_placed = False
             while not apple_placed:
                 new_apple = Apple()
@@ -142,8 +152,13 @@ class Board:
                         and new_location not in self.__board_dict['orange'] \
                         and new_location not in self.__board_dict['red']:
                     self.__apple_instances_set.add(new_apple)
+                apple_placed = True
 
         self.__board_dict['green'] = self.get_all_apple_locations()
+
+        self.__board_dict['black'] = self.__snake.get_all_coor()
+
+        print(self.__board_dict)
         return self.__board_dict
 
 
@@ -163,7 +178,7 @@ class Board:
         list_orange = self.__board_dict['orange']
 
         # check if the snake is inside the board
-        head_of_snake = self.__snake.get_head
+        head_of_snake = self.__snake.get_head()
         cur_x, cur_y = head_of_snake
         if cur_y < 0 or cur_x < 0 or cur_y > self.__height - 1 or cur_x > self.__width - 1:
             return False
@@ -182,19 +197,19 @@ class Board:
         return True
 
     def get_board(self):
-        print("bomb", self.__all_static_bomb_loc)
-        print("bomb", self.__bomb_instance)
-        print("bomb", self.__all_static_bomb_loc)
-        print("snake", self.__snake.get_all_coor())
-        print("apples", self.get_all_apple_locations())
-        print("ex", self.__all_explosion_loc)
+        # print("bomb list static", self.__all_static_bomb_loc)
+        # print("bomb instacne", self.__bomb_instance)
+        # print("bomb explosions", self.__all_explosion_loc)
+        # print("snake coordinates", self.__snake.get_all_coor())
+        # print("apples locations", self.get_all_apple_locations())
 
 
-        # self.__board_dict = {}
-        self.__board_dict['black'] = self.__snake.get_all_coor()
-        self.__board_dict['red'] = self.__all_static_bomb_loc
-        self.__board_dict['orange'] = []
-        self.__board_dict['green'] = self.get_all_apple_locations()
+
+        # self.__bord_dict = {}
+        # self.__board_dict['black'] = self.__snake.get_all_coor()
+        # self.__board_dict['red'] = self.__all_static_bomb_loc
+        # self.__board_dict['orange'] = []
+        # selaf.__board_dict['green'] = self.get_all_apple_locations()
 
         return self.__board_dict
 
