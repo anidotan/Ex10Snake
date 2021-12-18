@@ -8,6 +8,9 @@ class Apple:
         self.__y = y
         self.__score = score
 
+    def __str__(self):
+        return f'{self.__x}, {self.__y}, {self.__score}'
+
     def get_apple_score(self):
         return self.__score
 

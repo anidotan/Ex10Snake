@@ -16,12 +16,13 @@ class Linked_list:
         self.head = None
 
     def all_nodes_as_list(self):
+        pointer = self.head
         list_all = []
         finished = False
         while not finished:
-            list_all.append(self.head.value)
-            self.head = self.head.next
-            if self.head is None:
+            list_all.append(pointer.value)
+            pointer = pointer.next
+            if pointer is None:
                 finished = True
         return list_all
 

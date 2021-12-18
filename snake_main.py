@@ -55,22 +55,25 @@ def old_main_loop(gd: GameDisplay) -> None:
 def main_loop(gd: GameDisplay) -> None:
     gd.show_score(0)
     key_before = "Up"
-    game_board = Board(30, 40)
+    game_board = Board(30, 40) # todo - change so it will get constants
     game_board.initialize_board()
+
     continue_game = True
     while continue_game:
         key_clicked = gd.get_key_clicked()
         cur_key = get_key(key_clicked, key_before)
-        game_board.update_board(cur_key)
+        current_board = game_board.update_board(cur_key)
 
         new_score = game_board.get_score()  # get the new score
         gd.show_score(new_score)  # updates the score display
 
-        dict_of_colors = game_board.update_board(cur_key)  # todo might change
-        print(dict_of_colors)  # remove
+        dict_of_colors = game_board.get_board()  # todo might change
+        # print(dict_of_colors) remove
+
         # unpack the colors
         for color in dict_of_colors:
             list_cells = dict_of_colors[color]
+            # print("4", list_cells) remove
             if list_cells:
                 for location_tuple in list_cells:
                     x, y = location_tuple
