@@ -10,9 +10,10 @@ class Board:
         self.__width = width
         self.__locations = [(x, y) for x in range(self.__width) for y in
                             range(self.__height)]
-        # todo: change name
-        self.__board_dict = {'snake': snake_loc, 'apples': apples, 'bombs': bombs,
-                        'explosion': []}
+        self.__snake = []
+        self.__apples = []
+        self.__bombs = []
+        self.__expolsion = []
 
     def set_explosions(self, explosion_loc: List[Tuple[int,int]]) -> None:
         """
@@ -45,7 +46,7 @@ class Board:
             # check if the snake touched a bomb
             elif len(set(snake_loc).intersection(set(bombs_loc))) == 0 and len(explosion_loc) != 0:
                 return False
-            # check id the snake touched itself
+            # check if the snake touched itself
             elif len(set(snake_loc)) != len(snake_loc):
                 return False
         return True
