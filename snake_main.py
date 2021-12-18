@@ -4,7 +4,7 @@ from game import Game
 
 from typing import Dict, List, Tuple
 
-OBJECT_COLORS = {'snake': 'Black', 'apples': 'green', 'bombs': 'red',
+OBJECT_COLORS = {'snake': 'black', 'apples': 'green', 'bombs': 'red',
                 'explosion': 'orange'}
 
 
