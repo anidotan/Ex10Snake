@@ -1,3 +1,6 @@
+from game_parameters import get_random_bomb_data
+
+
 class Bomb:
     """
     creates a bomb instance for the game of snake
@@ -13,12 +16,14 @@ class Bomb:
                         single shock wave of a bomb.
                         the first set is the beginning of the explosion and
                         each following set is a single spreading shock wave
-     waiting frames - a list with repeating tuple of the bomb location (x, y)
+    waiting frames - a list with repeating tuple of the bomb location (x, y)
                     the length of the list and number of repetition is the same
                     as the time (number of rounds) until the bomb
                     should explode
+    get locations - returns the
     """
-    def __init__(self, x: int, y: int, radius: int, time: int):
+    def __init__(self):
+        x, y, radius, time = get_random_bomb_data()
         self.__x = x
         self.__y = y
         self.__radius = radius
@@ -60,3 +65,9 @@ class Bomb:
             list_all_frames.append(bomb_tuple)
 
         return list_all_frames
+
+    def get_location(self):
+        """
+        :return: the location of the bomb as a tuple[x: int, y: int]
+        """
+        return tuple((self.__x, self.__y))
