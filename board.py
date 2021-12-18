@@ -94,8 +94,8 @@ class Board:
 
     def get_board(self):
         board_dict = {}
-        board_dict['Red'] = self.__bomb_loc
-        board_dict['Orange'] = self.__bomb_loc
-        board_dict['Black'] = self.__snake_loc
-        board_dict['Green'] = self.__apples_loc
+        board_dict['red'] = self.__bomb_loc
+        board_dict['orange'] = self.__bomb_loc
+        board_dict['black'] = self.__snake_loc
+        board_dict['green'] = self.__apples_loc
         return board_dict
