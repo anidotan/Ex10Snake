@@ -10,25 +10,14 @@ class Board:
     def __init__(self, height: int, width: int):
         self.__height = height
         self.__width = width
-        # self.__locations = [(x, y) for x in range(self.__width) for y in
-        #                     range(self.__height)]
         self.__score = 0
         self.__snake = None
         self.__snake_loc = []
         self.__apples = set()
-        # self.__apples_loc = []
         self.__bomb = None
         self.__bomb_loc = []
         self.__explosion_loc = []
         self.__eating_counter = 0
-
-    def create_new_bomb(self):
-        pass
-
-
-    def get_all_apple_locations(self):
-        return [apple.get_location() for apple in self.__apples]
-
 
     def initialize_board(self):
         """
@@ -65,6 +54,9 @@ class Board:
 
     def get_score(self):
         return self.__score
+
+    def get_all_apple_locations(self):
+        return [apple.get_location() for apple in self.__apples]
 
     def update_board(self, key):
         # todo: check if i have enough apples on the board and bombs. maybe in the beginning or in the end?
@@ -126,6 +118,9 @@ class Board:
                     and new_location not in board_dict['red']:
                         self.__apples.add(new_apple)
 
+        board_dict['green'] = self.get_all_apple_locations()
+        return board_dict
+
 
     def is_valid_board(self) -> bool:
         # checks if the board is valid according to all of the edge cases
@@ -156,11 +151,14 @@ class Board:
             elif len(set(snake_loc)) != len(snake_loc):
                 return False
         return True
-
+"""
     def get_board(self):
         board_dict = {}
         board_dict['red'] = self.__bomb_loc
         board_dict['orange'] = self.__bomb_loc
         board_dict['black'] = self.__snake_loc
         # board_dict['green'] = self.__apples_loc
+
         return board_dict
+
+"""
