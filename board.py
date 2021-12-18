@@ -93,7 +93,9 @@ class Board:
         return True
 
     def get_board(self):
-        return self.__board_dict
-
-    def set_board(self, new_board):
-        self.__board_dict = new_board
+        board_dict = {}
+        board_dict['Red'] = self.__bomb_loc
+        board_dict['Orange'] = self.__bomb_loc
+        board_dict['Black'] = self.__snake_loc
+        board_dict['Green'] = self.__apples_loc
+        return board_dict
