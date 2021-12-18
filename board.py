@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from snake import Snake
+import snake
 from bomb import Bomb
 from apple import Apple
 
@@ -20,6 +20,7 @@ class Board:
         self.__bomb = None
         self.__bomb_loc = []
         self.__explosion_loc = []
+        self.__explosion_loc = []
         self.__eating_counter = 0
 
 
@@ -31,6 +32,7 @@ class Board:
         3. place the apples
         :return: board
         """
+        self.__snake = snake.Snake()
         self.__snake = [(10, 10), (10, 9), (10, 8)]
         locations_in_use = self.__snake[:]
 
@@ -60,6 +62,35 @@ class Board:
         return self.__score
 
     def update_board(self, key):
+        colors = ['red', 'green', 'black', 'orange']
+        board_dict = {c: [] for c in colors}
+
+
+        # move snake
+        if self.__eating_counter == 0:
+            self.__snake.simple_move(key)
+            self.__snake_loc = self.__snake.get_all_coor()
+
+
+        # todo: check if i have enough apples on the board and bombs. maybe in the beginning or in the end?
+
+        # advance bomb or explosion
+        elif len(self.__bomb_loc) >= 0 and len(self.__explosion_loc) > 0:
+            if len(self.__bomb_loc) > 0:
+                board_dict['red'] = self.__bomb_loc.pop()
+            else:
+                board_dict['orange'] = self.__explosion_loc.pop(0)
+
+
+        # deal with bomb
+        # eating apple
+        #
+        elif self.__eating_counter > 0:
+        # todo: eating an apple
+            self.__snake.forward_head_only(key)
+            self.__eating_counter -= 1
+
+
 
 
     def is_valid_board(self) -> bool:
