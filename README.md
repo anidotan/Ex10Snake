@@ -13,3 +13,4 @@ __todo:__
 6. take care of line 89 in board 
 7. find new apple to add  todo if there is no more room - the game is finished
 8. take care or todos in snake_main and snake 
+9. add all_loc_set for the all of the location 

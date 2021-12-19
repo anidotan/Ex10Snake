@@ -62,6 +62,7 @@ class Board:
         all_loc.extend(self.__snake.get_all_coor())
         all_loc.extend(self.__board_dict['red'])
         all_loc.extend(self.__board_dict['orange'])
+        # todo: make this more effective - only run on the dicts instead of calling the functions
         # todo: test this
         return loc in all_loc
 
@@ -122,6 +123,7 @@ class Board:
                         and new_location not in self.__board_dict['orange'] \
                         and new_location not in self.__board_dict['red']:
                     self.__apple_instances_set.add(new_apple)
+                # todo: test if we really need this
                 apple_to_remove = None
                 apple_placed = True
 
