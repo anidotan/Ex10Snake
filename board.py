@@ -32,7 +32,10 @@ class Board:
         """
         self.__snake = Snake()
         locations_in_use = self.__snake.get_all_coor()
+        self.__board_dict['black'] = self.__snake.get_all_coor()  # todo
 
+        self.__board_dict['green'] = []  # todo
+        list_apple_locations = self.__board_dict['green']
         # add 3 apples to the board
         while len(self.__apple_instances_set) < 3:
             apple = Apple()
@@ -40,6 +43,7 @@ class Board:
             if apple_location not in locations_in_use:
                 self.__apple_instances_set.add(apple)
                 locations_in_use.append(apple_location)
+                list_apple_locations.append(apple_location)  # todo
 
         # add 1 bomb to the board
         while len(self.__all_static_bomb_loc) < 1:
@@ -49,6 +53,7 @@ class Board:
                 locations_in_use.append(bomb_location)
                 self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
                 self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
+                self.__board_dict['red'] = [bomb_location] # todo
 
     def get_score(self):
         return self.__score
@@ -78,14 +83,13 @@ class Board:
 
         # advance bomb or explosion
         if len(self.__all_static_bomb_loc) > 0:
-
             current_loc = self.__all_static_bomb_loc.pop()
             self.__board_dict['red'] = [current_loc]
         elif len(self.__all_explosion_loc) > 0:
             explosion_loc = self.__all_explosion_loc.pop(0)
             for apple in self.__apple_instances_set:
                 if apple.get_location() in explosion_loc:
-                    apple.move_apple()
+                    apple.move_apple()  # todo might come up ons snake !!!!!
             #         todo: move apple until it has a valid place
             self.__board_dict['orange'] = explosion_loc
             self.__board_dict['red'] = []
@@ -100,7 +104,7 @@ class Board:
                 self.__board_dict['orange'] = []
                 self.__board_dict['red'] = [self.__all_static_bomb_loc[0]]
 
-        # eating apple
+        # eating an apple
         apple_to_remove = None
         snake_head = self.__snake.get_head()
         for apple in self.__apple_instances_set:
@@ -122,7 +126,7 @@ class Board:
                         and new_location not in self.__board_dict['orange'] \
                         and new_location not in self.__board_dict['red']:
                     self.__apple_instances_set.add(new_apple)
-                apple_to_remove = None
+                apple_to_remove = None  # todo what is this for ?
                 apple_placed = True
 
         self.__board_dict['green'] = self.get_all_apple_locations()
@@ -140,8 +144,8 @@ class Board:
         :return: bool
         """
         snake_loc = self.__snake.get_all_coor()
-        current_explosion_loc = self.__all_explosion_loc
-        current_bomb_loc = self.__all_static_bomb_loc
+        current_explosion_loc = self.__all_explosion_loc  # remove not in use
+        current_bomb_loc = self.__all_static_bomb_loc  # remove not in use
         list_red = self.__board_dict['red']
         list_orange = self.__board_dict['orange']
 
@@ -150,8 +154,8 @@ class Board:
         cur_x, cur_y = head_of_snake
         if cur_y < 0 or cur_x < 0 or cur_y > self.__height - 1 or cur_x > self.__width - 1:
             return False
-        # check if the snake touched a bomb
 
+        # check if the snake touched a bomb
         elif list_red and head_of_snake == list_red[0]:
             return False
 
@@ -162,9 +166,21 @@ class Board:
         # check if the snake touched itself
         elif len(set(snake_loc)) != len(snake_loc):
             return False
+
         return True
 
     def get_board(self):
+        list_orange_frames = self.__board_dict['orange']
+        all_snake_coor = self.__board_dict['black']
+
+        coor_to_remove = None
+        for black_coor in all_snake_coor:
+            if black_coor in list_orange_frames:
+                coor_to_remove = black_coor
+
+        if coor_to_remove is not None:
+            all_snake_coor.remove(coor_to_remove)
+
         return self.__board_dict
 
 
