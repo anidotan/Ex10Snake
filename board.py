@@ -1,15 +1,15 @@
+from typing import Tuple
+
 import game_parameters
 from apple import Apple
 from bomb import Bomb
 from snake import Snake
-from typing import Tuple
 
 
 class Board:
     def __init__(self, height: int, width: int):
         self.__height = height
         self.__width = width
-        self.__count_round = 0
         self.__score = 0
         self.__snake = None
         self.__bomb_instance = None
@@ -42,9 +42,6 @@ class Board:
                 self.__board_dict['red'] = [bomb_location]
                 self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
                 self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
-
-        print(
-            f'added a new bomb! expolsion time is: {self.__bomb_instance.get_exploiding_time()}')
 
         # add 3 apples to the board
         while len(self.__apple_instances_set) < 3:
@@ -80,7 +77,6 @@ class Board:
         # advance bomb or explosion
         if len(self.__all_static_bomb_loc) > 0:
             current_loc = self.__all_static_bomb_loc.pop()
-            self.__count_round += 1
             self.__board_dict['red'] = [current_loc]
         elif len(self.__all_explosion_loc) > 0:
             explosion_loc = self.__all_explosion_loc.pop(0)
@@ -92,22 +88,21 @@ class Board:
                         new_locaion = apple.get_location()
                         if self.can_place_obj(new_locaion):
                             apple_placed = True
-                    # todo: move apple until it has a valid place
             self.__board_dict['orange'] = explosion_loc
             self.__board_dict['red'] = []
         else:  # add new bomb
-            print(f'time till bomb exploaded is: {self.__count_round}')
-            self.__count_round = 0
-            new_bomb = Bomb()
-            new_location = new_bomb.get_location()
-            if new_location not in self.__board_dict['black'] \
-                    and new_location not in self.__board_dict['green']:
-                self.__bomb_instance = new_bomb
-                print(f'added a new bomb! expolsion time is: {self.__bomb_instance.get_exploiding_time()}')
-                self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
-                self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
-                self.__board_dict['orange'] = []
-                self.__board_dict['red'] = [self.__all_static_bomb_loc[0]]
+            # placed
+            while len(self.__board_dict['red']) < 1:
+                new_bomb = Bomb()
+                new_location = new_bomb.get_location()
+                if new_location not in self.__board_dict['black'] \
+                        and new_location not in self.__board_dict['green']:
+                    self.__bomb_instance = new_bomb
+                    self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
+                    self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
+                    self.__board_dict['orange'] = []
+                    new_bomb = self.__all_static_bomb_loc.pop()
+                    self.__board_dict['red'] = [new_bomb]
 
         # eating an apple
         apple_to_remove = None
@@ -120,15 +115,19 @@ class Board:
 
         # new apple in case we ate one
         if apple_to_remove is not None:
-            self.__apple_instances_set.remove(apple_to_remove)  # removing the old
+            self.__apple_instances_set.remove(
+                apple_to_remove)  # removing the old
 
             # find new apple to add
             apple_placed = False
             while not apple_placed:
                 new_apple = Apple()
                 new_location = new_apple.get_location()
-                # todo - make sure correct
-                num_cells_in_use = len(self.__board_dict['red']) + len(self.__board_dict['black']) + len(self.__board_dict['orange']) + len(self.__board_dict['green'])
+                # todo - make sure correct - apples finish the game
+                num_cells_in_use = len(self.__board_dict['red']) + len(
+                    self.__board_dict['black']) + len(
+                    self.__board_dict['orange']) + len(
+                    self.__board_dict['green'])
                 if num_cells_in_use == game_parameters.WIDTH * game_parameters.HEIGHT:
                     self.__continue_game = False
                     break
@@ -149,8 +148,6 @@ class Board:
         :return: bool
         """
         snake_loc = self.__snake.get_all_coor()
-        current_explosion_loc = self.__all_explosion_loc  # remove not in use
-        current_bomb_loc = self.__all_static_bomb_loc  # remove not in use
         list_red = self.__board_dict['red']
         list_orange = self.__board_dict['orange']
 

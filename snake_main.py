@@ -71,7 +71,8 @@ def main_loop(gd: GameDisplay) -> None:
             if list_cells:
                 for location_tuple in list_cells:
                     x, y = location_tuple
-                    if y < 0 or x < 0 or y > game_parameters.HEIGHT - 1 or x > game_parameters.WIDTH - 1:
+                    if y < 0 or x < 0 or y > game_parameters.HEIGHT - 1 or \
+                            x > game_parameters.WIDTH - 1:
                         continue
                     else:
                         gd.draw_cell(x, y, color)

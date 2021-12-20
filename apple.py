@@ -1,6 +1,7 @@
 from typing import Tuple
 import game_parameters
 
+
 class Apple:
     def __init__(self):
         x, y, score = game_parameters.get_random_apple_data()
@@ -25,10 +26,5 @@ class Apple:
 
     def move_apple(self):
         x, y, score = game_parameters.get_random_apple_data()
-        self.__x = x
-        self.__y = y
-
-    # todo: remove this later
-    def set_location(self, x, y):
         self.__x = x
         self.__y = y
