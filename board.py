@@ -31,29 +31,34 @@ class Board:
         :return: board
         """
         self.__snake = Snake()
-        locations_in_use = self.__snake.get_all_coor()
+        # locations_in_use = self.__snake.get_all_coor()
         self.__board_dict['black'] = self.__snake.get_all_coor()  # todo
 
-        self.__board_dict['green'] = []  # todo
-        list_apple_locations = self.__board_dict['green']
+        # add 1 bomb to the board
+        # while len(self.__all_static_bomb_loc) < 1:
+        while len(self.__board_dict['red']) < 1:
+            self.__bomb_instance = Bomb()
+            bomb_location = self.__bomb_instance.get_location()
+            if bomb_location not in self.__board_dict['black']:
+                self.__board_dict['red'] = [bomb_location]
+                self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
+                self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
+                # self.__board_dict['red'] = [bomb_location] # todo
+
+
+
+        # self.__board_dict['green'] = []  # todo
+        # list_apple_locations = self.__board_dict['green']
         # add 3 apples to the board
         while len(self.__apple_instances_set) < 3:
             apple = Apple()
             apple_location = apple.get_location()
-            if apple_location not in locations_in_use:
+            if apple_location not in self.__board_dict['red'] and apple_location not in self.__board_dict['black'] and apple_location not in self.__board_dict['green']:
                 self.__apple_instances_set.add(apple)
-                locations_in_use.append(apple_location)
-                list_apple_locations.append(apple_location)  # todo
-
-        # add 1 bomb to the board
-        while len(self.__all_static_bomb_loc) < 1:
-            self.__bomb_instance = Bomb()
-            bomb_location = self.__bomb_instance.get_location()
-            if bomb_location not in locations_in_use:
-                locations_in_use.append(bomb_location)
-                self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
-                self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
-                self.__board_dict['red'] = [bomb_location] # todo
+                green_apples = self.__board_dict['green']
+                green_apples.append(apple_location)
+                # locations_in_use.append(apple_location)
+                # list_apple_locations.append(apple_location)  # todo
 
     def get_score(self):
         return self.__score
@@ -67,6 +72,7 @@ class Board:
         all_loc.extend(self.__snake.get_all_coor())
         all_loc.extend(self.__board_dict['red'])
         all_loc.extend(self.__board_dict['orange'])
+        # todo: make this more effective - only run on the dicts instead of calling the functions
         # todo: test this
         return loc in all_loc
 
@@ -126,6 +132,8 @@ class Board:
                         and new_location not in self.__board_dict['orange'] \
                         and new_location not in self.__board_dict['red']:
                     self.__apple_instances_set.add(new_apple)
+                # todo: test if we really need this
+                apple_to_remove = None
                 apple_to_remove = None  # todo what is this for ?
                 apple_placed = True
 

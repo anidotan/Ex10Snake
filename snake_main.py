@@ -65,14 +65,12 @@ def main_loop(gd: GameDisplay) -> None:
 
     while continue_game:
         # start by printing the screen
-        color_of_end_game = game_board.get_board()
-        # dict_of_colors = {'green': [(37, 19), (20, 6), (15, 29)], 'black': [(19, 12), (18, 12), (17, 12), (16, 12), (15, 12), (14, 12), (13, 12), (12, 12), (11, 12), (10, 12), (10, 11), (10, 10), (10, 9), (9, 9), (8, 9), (7, 9), (6, 9), (5, 9)], 'red': [], 'orange': [(16, 7), (15, 8), (17, 10), (20, 7), (19, 10), (16, 9), (19, 6), (17, 6), (20, 9), (21, 8), (18, 5), (18, 11)]}
-        # example of bad frame - explosion not on top od snake
-        print(color_of_end_game)
+        dict_of_colors = game_board.get_board()
+        print(dict_of_colors)  # remove
 
         # unpack the colors
-        for color in color_of_end_game:
-            list_cells = color_of_end_game[color]
+        for color in dict_of_colors:
+            list_cells = dict_of_colors[color]
 
             if list_cells:
                 for location_tuple in list_cells:
@@ -85,20 +83,6 @@ def main_loop(gd: GameDisplay) -> None:
 
         new_score = game_board.get_score()  # get the new score
         gd.show_score(new_score)  # updates the score display
-
-        # dict_of_colors = game_board.get_board()  # todo might change
-        # # unpack the colors
-        # for color in dict_of_colors:
-        #     list_cells = dict_of_colors[color]
-        #     # print("4", list_cells) remove
-        #     if list_cells:
-        #         for location_tuple in list_cells:
-        #             x, y = location_tuple
-        #             gd.draw_cell(x, y, color)
-
-
-
-
 
         # check if the game have been finished
         continue_game = game_board.is_valid_board()  # todo
