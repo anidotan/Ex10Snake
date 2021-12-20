@@ -1,9 +1,9 @@
+from typing import Tuple
+
 import game_parameters
-from snake import Snake
 from apple import Apple
 from bomb import Bomb
-
-from typing import Tuple
+from snake import Snake
 
 
 class Board:
@@ -19,8 +19,9 @@ class Board:
         self.__locations = [(x, y) for x in range(self.__width) for y in
                             range(self.__height)]
         self.__apple_instances_set = set()
-        colors = ['green', 'black', 'red', 'orange']
+        colors = ['black', 'red', 'green', 'orange']
         self.__board_dict = {c: [] for c in colors}
+        self.__continue_game = True
 
     def initialize_board(self):
         """
@@ -31,34 +32,25 @@ class Board:
         :return: board
         """
         self.__snake = Snake()
-        # locations_in_use = self.__snake.get_all_coor()
-        self.__board_dict['black'] = self.__snake.get_all_coor()  # todo
+        self.__board_dict['black'] = self.__snake.get_all_coor()
 
         # add 1 bomb to the board
-        # while len(self.__all_static_bomb_loc) < 1:
         while len(self.__board_dict['red']) < 1:
             self.__bomb_instance = Bomb()
             bomb_location = self.__bomb_instance.get_location()
-            if bomb_location not in self.__board_dict['black']:
+            if self.can_place_obj(bomb_location):
                 self.__board_dict['red'] = [bomb_location]
                 self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
                 self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
-                # self.__board_dict['red'] = [bomb_location] # todo
 
-
-
-        # self.__board_dict['green'] = []  # todo
-        # list_apple_locations = self.__board_dict['green']
         # add 3 apples to the board
         while len(self.__apple_instances_set) < 3:
             apple = Apple()
             apple_location = apple.get_location()
-            if apple_location not in self.__board_dict['red'] and apple_location not in self.__board_dict['black'] and apple_location not in self.__board_dict['green']:
+            if apple_location not in self.__board_dict.values():
                 self.__apple_instances_set.add(apple)
                 green_apples = self.__board_dict['green']
                 green_apples.append(apple_location)
-                # locations_in_use.append(apple_location)
-                # list_apple_locations.append(apple_location)  # todo
 
     def get_score(self):
         return self.__score
@@ -66,15 +58,10 @@ class Board:
     def get_all_apple_locations(self):
         return [apple.get_location() for apple in self.__apple_instances_set]
 
-    def can_place_obj(self, loc: Tuple[int,int]):
-        all_loc = []
-        all_loc.extend(self.get_all_apple_locations())
-        all_loc.extend(self.__snake.get_all_coor())
-        all_loc.extend(self.__board_dict['red'])
-        all_loc.extend(self.__board_dict['orange'])
-        # todo: make this more effective - only run on the dicts instead of calling the functions
-        # todo: test this
-        return loc in all_loc
+    def can_place_obj(self, loc: Tuple[int, int]) -> bool:
+        return loc not in self.__board_dict['red'] and loc not in \
+               self.__board_dict['black'] and loc not in self.__board_dict[
+                   'green'] and loc not in self.__board_dict['orange']
 
     def update_board(self, key):
         # move snake - no apple
@@ -95,20 +82,27 @@ class Board:
             explosion_loc = self.__all_explosion_loc.pop(0)
             for apple in self.__apple_instances_set:
                 if apple.get_location() in explosion_loc:
-                    apple.move_apple()  # todo might come up ons snake !!!!!
-            #         todo: move apple until it has a valid place
+                    apple_placed = False
+                    while not apple_placed:
+                        apple.move_apple()
+                        new_locaion = apple.get_location()
+                        if self.can_place_obj(new_locaion):
+                            apple_placed = True
             self.__board_dict['orange'] = explosion_loc
             self.__board_dict['red'] = []
         else:  # add new bomb
-            new_bomb = Bomb()
-            new_location = new_bomb.get_location()
-            if new_location not in self.__board_dict['black'] \
-                and new_location not in self.get_all_apple_locations():
-                self.__bomb_instance = new_bomb
-                self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
-                self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
-                self.__board_dict['orange'] = []
-                self.__board_dict['red'] = [self.__all_static_bomb_loc[0]]
+            # placed
+            while len(self.__board_dict['red']) < 1:
+                new_bomb = Bomb()
+                new_location = new_bomb.get_location()
+                if new_location not in self.__board_dict['black'] \
+                        and new_location not in self.__board_dict['green']:
+                    self.__bomb_instance = new_bomb
+                    self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
+                    self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
+                    self.__board_dict['orange'] = []
+                    new_bomb = self.__all_static_bomb_loc.pop()
+                    self.__board_dict['red'] = [new_bomb]
 
         # eating an apple
         apple_to_remove = None
@@ -121,26 +115,28 @@ class Board:
 
         # new apple in case we ate one
         if apple_to_remove is not None:
-            self.__apple_instances_set.remove(apple_to_remove) # removing the old
-            # find new apple to add  todo if there is no more room - the game is finished
+            self.__apple_instances_set.remove(
+                apple_to_remove)  # removing the old
+
+            # find new apple to add
             apple_placed = False
             while not apple_placed:
                 new_apple = Apple()
                 new_location = new_apple.get_location()
-                if new_location not in self.__board_dict['black'] \
-                        and new_location not in self.get_all_apple_locations() \
-                        and new_location not in self.__board_dict['orange'] \
-                        and new_location not in self.__board_dict['red']:
+                # todo - make sure correct - apples finish the game
+                num_cells_in_use = len(self.__board_dict['red']) + len(
+                    self.__board_dict['black']) + len(
+                    self.__board_dict['orange']) + len(
+                    self.__board_dict['green'])
+                if num_cells_in_use == game_parameters.WIDTH * game_parameters.HEIGHT:
+                    self.__continue_game = False
+                    break
+                elif self.can_place_obj(new_location):
                     self.__apple_instances_set.add(new_apple)
-                # todo: test if we really need this
-                apple_to_remove = None
-                apple_to_remove = None  # todo what is this for ?
-                apple_placed = True
+                    apple_placed = True
 
         self.__board_dict['green'] = self.get_all_apple_locations()
         self.__board_dict['black'] = self.__snake.get_all_coor()
-
-        # return self.__board_dict
 
     def is_valid_board(self) -> bool:
         """
@@ -152,8 +148,6 @@ class Board:
         :return: bool
         """
         snake_loc = self.__snake.get_all_coor()
-        current_explosion_loc = self.__all_explosion_loc  # remove not in use
-        current_bomb_loc = self.__all_static_bomb_loc  # remove not in use
         list_red = self.__board_dict['red']
         list_orange = self.__board_dict['orange']
 
@@ -161,21 +155,22 @@ class Board:
         head_of_snake = self.__snake.get_head()
         cur_x, cur_y = head_of_snake
         if cur_y < 0 or cur_x < 0 or cur_y > self.__height - 1 or cur_x > self.__width - 1:
-            return False
+            self.__continue_game = False
 
         # check if the snake touched a bomb
         elif list_red and head_of_snake == list_red[0]:
-            return False
+            self.__continue_game = False
 
         # check if the snake touched an explosion
-        elif list_orange and len(set(snake_loc).intersection(set(list_orange))) > 0:
-            return False
+        elif list_orange and len(
+                set(snake_loc).intersection(set(list_orange))) > 0:
+            self.__continue_game = False
 
         # check if the snake touched itself
         elif len(set(snake_loc)) != len(snake_loc):
-            return False
+            self.__continue_game = False
 
-        return True
+        return self.__continue_game
 
     def get_board(self):
         list_orange_frames = self.__board_dict['orange']
@@ -190,5 +185,3 @@ class Board:
             all_snake_coor.remove(coor_to_remove)
 
         return self.__board_dict
-
-

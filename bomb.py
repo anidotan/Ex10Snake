@@ -47,24 +47,31 @@ class Bomb:
 
             bad_frame = False
             for i in range(r + 1):
-
                 a = tuple((self.__x + i, upper_y - i))
-                if self.__x + i < 0 or upper_y - i < 0 or self.__x + i > game_parameters.WIDTH - 1 or upper_y - i > game_parameters.HEIGHT - 1:
+                if self.__x + i < 0 or upper_y - i < 0 or\
+                        self.__x + i > game_parameters.WIDTH - 1 or\
+                        upper_y - i > game_parameters.HEIGHT - 1:
                     bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(a)
                 b = tuple((right_x - i, self.__y - i))
-                if right_x - i < 0 or self.__y - i < 0 or right_x - i > game_parameters.WIDTH - 1or self.__y - i > game_parameters.HEIGHT - 1:
+                if right_x - i < 0 or self.__y - i < 0 or\
+                        right_x - i > game_parameters.WIDTH - 1 or\
+                        self.__y - i > game_parameters.HEIGHT - 1:
                     bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(b)
                 c = tuple((self.__x - i, upper_y - i))
-                if self.__x - i < 0 or upper_y - i < 0 or self.__x - i > game_parameters.WIDTH - 1 or upper_y - i > game_parameters.HEIGHT - 1:
+                if self.__x - i < 0 or upper_y - i < 0 or\
+                        self.__x - i > game_parameters.WIDTH - 1 or\
+                        upper_y - i > game_parameters.HEIGHT - 1:
                     bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(c)
                 d = tuple((left_x + i, self.__y - i))
-                if left_x + i < 0 or self.__y - i < 0 or left_x + i > game_parameters.WIDTH - 1 or self.__y - i > game_parameters.HEIGHT - 1:
+                if left_x + i < 0 or self.__y - i < 0 or\
+                        left_x + i > game_parameters.WIDTH - 1 or\
+                        self.__y - i > game_parameters.HEIGHT - 1:
                     bad_frame = True
                     break
                 set_of_tuples_in_single_frame.add(d)
@@ -94,8 +101,18 @@ class Bomb:
         """
         return tuple((self.__x, self.__y))
 
+    # todo: remove this later
+    def set_location(self, x, y):
+        self.__x = x
+        self.__y = y
+
+    # todo: remove this later
+    def get_exploiding_time(self):
+        return self.__time
+
 if __name__ == '__main__':
     bibi = Bomb()
     print(bibi)
     print(bibi.explosion_frames())
     print(bibi.waiting_frames())
+    print("time", len(bibi.waiting_frames()))
