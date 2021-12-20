@@ -26,32 +26,6 @@ def get_key(new_key, old_key):
     return key_now
 
 
-def old_main_loop(gd: GameDisplay) -> None:
-    gd.show_score(0)
-    x, y = 10, 10
-    key_before = "Up"
-    while True:
-        key_clicked = gd.get_key_clicked()
-        if key_clicked is None:
-            key_now = key_before
-        else:
-            key_now = key_clicked
-
-        if (key_now == 'Left') and (x > 0):
-            x -= 1
-        elif (key_now == 'Right') and (x < game_parameters.WIDTH):
-            x += 1
-        elif (key_now == 'Up') and (y < game_parameters.HEIGHT):
-            y += 1
-        elif (key_now == 'Down') and (x < game_parameters.HEIGHT):
-            y -= 1
-        gd.draw_cell(x, y, "red")
-        gd.show_score(10)
-        key_before = key_now
-
-        gd.end_round()
-
-
 def main_loop(gd: GameDisplay) -> None:
     # start score 0
     gd.show_score(0)
@@ -62,12 +36,34 @@ def main_loop(gd: GameDisplay) -> None:
     game_board.initialize_board()
     # the flag for ending the game
     continue_game = True
+    # printing the first board as it started
+    dict_of_colors = game_board.get_board()
+    # unpack the colors
+    for color in dict_of_colors:
+        list_cells = dict_of_colors[color]
+
+        if list_cells:
+            for location_tuple in list_cells:
+                x, y = location_tuple
+                gd.draw_cell(x, y, color)
+
+    gd.end_round()
 
     while continue_game:
+        # get the new move input
+        key_clicked = gd.get_key_clicked()
+        cur_key = get_key(key_clicked, key_before)
+        # update the board
+        game_board.update_board(cur_key)
+
+        continue_game = game_board.is_valid_board()
+
+        new_score = game_board.get_score()  # get the new score
+        gd.show_score(new_score)  # updates the score display
+
         # start by printing the screen
         dict_of_colors = game_board.get_board()
-        print(dict_of_colors)  # remove
-
+        print(dict_of_colors)
         # unpack the colors
         for color in dict_of_colors:
             list_cells = dict_of_colors[color]
@@ -75,32 +71,11 @@ def main_loop(gd: GameDisplay) -> None:
             if list_cells:
                 for location_tuple in list_cells:
                     x, y = location_tuple
-                    gd.draw_cell(x, y, color)
-
-        key_clicked = gd.get_key_clicked()
-        cur_key = get_key(key_clicked, key_before)
-        game_board.update_board(cur_key)  # remove
-
-        new_score = game_board.get_score()  # get the new score
-        gd.show_score(new_score)  # updates the score display
-
-        # check if the game have been finished
-        continue_game = game_board.is_valid_board()  # todo
-        if not continue_game:
-            color_of_end_game = game_board.get_board()
-            for color in color_of_end_game:
-                list_cells = color_of_end_game[color]
-
-                if list_cells:
-                    for location_tuple in list_cells:
-                        x, y = location_tuple
-                        if y < 0 or x < 0 or y > game_parameters.HEIGHT - 1 or x > game_parameters.WIDTH - 1:  # todo make better - used to not raise erroe if snake out of board
-                            continue
-                        else:
-                            gd.draw_cell(x, y, color)
+                    if y < 0 or x < 0 or y > game_parameters.HEIGHT - 1 or x > game_parameters.WIDTH - 1:
+                        continue
+                    else:
+                        gd.draw_cell(x, y, color)
 
         # updating the key so it we'll have a default moving direction
         key_before = cur_key
         gd.end_round()
-
-

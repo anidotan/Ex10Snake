@@ -1,4 +1,4 @@
-from better_linked_list import *
+from linked_list import *
 
 
 class Snake:

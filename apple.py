@@ -28,3 +28,7 @@ class Apple:
         self.__x = x
         self.__y = y
 
+    # todo: remove this later
+    def set_location(self, x, y):
+        self.__x = x
+        self.__y = y
