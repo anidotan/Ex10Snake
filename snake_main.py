@@ -64,12 +64,14 @@ def main_loop(gd: GameDisplay) -> None:
     continue_game = True
 
     while continue_game:
-
         # start by printing the screen
         dict_of_colors = game_board.get_board()
+        print(dict_of_colors)  # remove
+
         # unpack the colors
         for color in dict_of_colors:
             list_cells = dict_of_colors[color]
+
             if list_cells:
                 for location_tuple in list_cells:
                     x, y = location_tuple
@@ -82,23 +84,21 @@ def main_loop(gd: GameDisplay) -> None:
         new_score = game_board.get_score()  # get the new score
         gd.show_score(new_score)  # updates the score display
 
-        dict_of_colors = game_board.get_board()  # todo might change
-
-        # # unpack the colors
-        # for color in dict_of_colors:
-        #     list_cells = dict_of_colors[color]
-        #     # print("4", list_cells) remove
-        #     if list_cells:
-        #         for location_tuple in list_cells:
-        #             x, y = location_tuple
-        #             gd.draw_cell(x, y, color)
-
-
-
-
-
         # check if the game have been finished
         continue_game = game_board.is_valid_board()  # todo
+        if not continue_game:
+            color_of_end_game = game_board.get_board()
+            for color in color_of_end_game:
+                list_cells = color_of_end_game[color]
+
+                if list_cells:
+                    for location_tuple in list_cells:
+                        x, y = location_tuple
+                        if y < 0 or x < 0 or y > game_parameters.HEIGHT - 1 or x > game_parameters.WIDTH - 1:  # todo make better - used to not raise erroe if snake out of board
+                            continue
+                        else:
+                            gd.draw_cell(x, y, color)
+
         # updating the key so it we'll have a default moving direction
         key_before = cur_key
         gd.end_round()
