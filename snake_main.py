@@ -63,7 +63,7 @@ def main_loop(gd: GameDisplay) -> None:
 
         # start by printing the screen
         dict_of_colors = game_board.get_board()
-        print(dict_of_colors)
+        
         # unpack the colors
         for color in dict_of_colors:
             list_cells = dict_of_colors[color]

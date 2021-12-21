@@ -42,6 +42,7 @@ class Board:
                 self.__board_dict['red'] = [bomb_location]
                 self.__all_static_bomb_loc = self.__bomb_instance.waiting_frames()
                 self.__all_explosion_loc = self.__bomb_instance.explosion_frames()
+                self.__all_static_bomb_loc.pop()
 
         # add 3 apples to the board
         while len(self.__apple_instances_set) < 3:

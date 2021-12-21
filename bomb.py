@@ -100,19 +100,3 @@ class Bomb:
         :return: the location of the bomb as a tuple[x: int, y: int]
         """
         return tuple((self.__x, self.__y))
-
-    # todo: remove this later
-    def set_location(self, x, y):
-        self.__x = x
-        self.__y = y
-
-    # todo: remove this later
-    def get_exploiding_time(self):
-        return self.__time
-
-if __name__ == '__main__':
-    bibi = Bomb()
-    print(bibi)
-    print(bibi.explosion_frames())
-    print(bibi.waiting_frames())
-    print("time", len(bibi.waiting_frames()))
