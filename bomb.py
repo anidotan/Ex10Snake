@@ -1,5 +1,7 @@
 import game_parameters
+# todo: do we need the width and height? - yes! for the explosion frames
 from game_parameters import get_random_bomb_data, WIDTH, HEIGHT
+from typing import Tuple
 
 
 class Bomb:
@@ -25,27 +27,29 @@ class Bomb:
     """
     def __init__(self):
         x, y, radius, time = get_random_bomb_data()
-        self.__x = x
-        self.__y = y
-        self.__radius = radius
-        self.__time = time
+        self.__x: int = x
+        self.__y: int = y
+        self.__radius: int = radius
+        self.__time: int = time
 
     def __str__(self):
+        # todo: do we need this - don't think so?
         return f'{(self.__x, self.__y, self.__radius, self.__time)}'
 
-    def explosion_frames(self):
+    def explosion_frames(self) -> list[list[tuple[int, int]]]:
+        # todo: typing
         """
         :return: list of lists with the different cells for the blast in each frame
         """
-        list_of_frames = []
+        list_of_frames: list = []
         for r in range(self.__radius):
 
-            set_of_tuples_in_single_frame = set()
-            right_x = self.__x + r
-            upper_y = self.__y + r
-            left_x = self.__x - r
+            set_of_tuples_in_single_frame: set = set()
+            right_x: int = self.__x + r
+            upper_y: int = self.__y + r
+            left_x: int = self.__x - r
 
-            bad_frame = False
+            bad_frame: bool = False
             for i in range(r + 1):
                 a = tuple((self.__x + i, upper_y - i))
                 if self.__x + i < 0 or upper_y - i < 0 or\
@@ -83,36 +87,20 @@ class Bomb:
 
         return list_of_frames
 
-    def waiting_frames(self) -> list[tuple]:
+    def waiting_frames(self) -> list[tuple[int, int]]:
         """
         :return: list of the bomb location as tuple. number of repetitions
-                is in accordance to the number of rounds until the bomb explodes
+            is in accordance to the number of rounds until the bomb explodes
         """
-        list_all_frames = []
-        bomb_tuple = tuple((self.__x, self.__y))
-        for i in range(self.__time):
+        list_all_frames: list = []
+        bomb_tuple: tuple = tuple((self.__x, self.__y))
+        for _ in range(self.__time):
             list_all_frames.append(bomb_tuple)
 
         return list_all_frames
 
-    def get_location(self):
+    def get_location(self) -> Tuple[int, int]:
         """
         :return: the location of the bomb as a tuple[x: int, y: int]
         """
         return tuple((self.__x, self.__y))
-
-    # todo: remove this later
-    def set_location(self, x, y):
-        self.__x = x
-        self.__y = y
-
-    # todo: remove this later
-    def get_exploiding_time(self):
-        return self.__time
-
-if __name__ == '__main__':
-    bibi = Bomb()
-    print(bibi)
-    print(bibi.explosion_frames())
-    print(bibi.waiting_frames())
-    print("time", len(bibi.waiting_frames()))
