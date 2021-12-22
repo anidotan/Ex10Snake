@@ -1,5 +1,5 @@
 import random
-from typing import Tuple, Any
+from typing import Tuple
 
 WIDTH = 40
 HEIGHT = 30

@@ -1,4 +1,5 @@
 from typing import Tuple
+
 import game_parameters
 
 
@@ -19,7 +20,6 @@ class Apple:
         """
         get the location of the apple
         """
-        # todo: docstring
         return self.__x, self.__y
 
     def get_score_by_loc(self, loc: Tuple[int,int]) -> int:
