@@ -3,10 +3,11 @@ from game_display import GameDisplay
 from board import Board
 
 
-def get_key(new_key, old_key):
+def get_key(new_key: str, old_key: str) -> str:
     """
     prevents the snake from going backwards "into his body"
-    :param new_key: the new key that's been clicked
+    :param new_key: the new key that's been clicked - string of
+                    the new direction or None if nothing was clicked
     :param old_key: the key before
     :return: the new relevant key
     """
@@ -27,17 +28,25 @@ def get_key(new_key, old_key):
 
 
 def main_loop(gd: GameDisplay) -> None:
+    """
+    the main function that drives the game - creates a board, initializing it
+    and moving the snake until the games is finished due to being disqualified
+    or that there is no more room for new apple
+    :param gd: uses given function to get the players input
+    :return: doesn't return anything - prints the board
+                                       on GUI throughout the game
+    """
     # start score 0
     gd.show_score(0)
     # start direction is up
-    key_before = "Up"
+    key_before: str = "Up"
     # create board and initialise it
     game_board = Board(game_parameters.HEIGHT, game_parameters.WIDTH)
     game_board.initialize_board()
     # the flag for ending the game
-    continue_game = True
+    continue_game: bool = True
     # printing the first board as it started
-    dict_of_colors = game_board.get_board()
+    dict_of_colors: dict = game_board.get_board()
     # unpack the colors
     for color in dict_of_colors:
         list_cells = dict_of_colors[color]
@@ -46,28 +55,28 @@ def main_loop(gd: GameDisplay) -> None:
             for location_tuple in list_cells:
                 x, y = location_tuple
                 gd.draw_cell(x, y, color)
-
+    # declare end round for initialize
     gd.end_round()
 
+    # starts the main loop of the game
     while continue_game:
         # get the new move input
         key_clicked = gd.get_key_clicked()
         cur_key = get_key(key_clicked, key_before)
         # update the board
         game_board.update_board(cur_key)
-
+        # check if the games should continue
         continue_game = game_board.is_valid_board()
+        # get the new score
+        new_score = game_board.get_score()
+        # updates the score display
+        gd.show_score(new_score)
 
-        new_score = game_board.get_score()  # get the new score
-        gd.show_score(new_score)  # updates the score display
-
-        # start by printing the screen
+        # start by printing the screen of the current round
         dict_of_colors = game_board.get_board()
-        print(dict_of_colors)
         # unpack the colors
         for color in dict_of_colors:
-            list_cells = dict_of_colors[color]
-
+            list_cells: list = dict_of_colors[color]
             if list_cells:
                 for location_tuple in list_cells:
                     x, y = location_tuple

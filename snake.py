@@ -1,4 +1,5 @@
 from linked_list import *
+# todo: add typing to all
 
 
 class Snake:
@@ -13,6 +14,9 @@ class Snake:
     simple move - when the snake is just moving - deletes its last cell and
                 puts a new want in front of the snake, according to its moving
                 direction
+    get all coor - returns a list of all the snake coordinates
+                    as tuples [(x, y), (x, y)]
+    get head - returns a tuple of the snakes head location
     """
 
     def __init__(self):
@@ -26,7 +30,7 @@ class Snake:
         self.the_snake.add_to_end(cell_2)
         self.the_snake.add_to_end(cell_3)
 
-    def forward_head_only(self, direction):
+    def forward_head_only(self, direction: str) -> None:
         """
         adds a cell in front of the head without moving the body
         """
@@ -54,10 +58,10 @@ class Snake:
             new_head_node = Node(tuple((x + 1, y)))
             self.the_snake.add_to_start(new_head_node)
 
-    def simple_move(self, direction):
+    def simple_move(self, direction: str) -> None:
         """
-        deletes the last cell and adds a new one in front of it according to
-        the moving direction
+        deletes the last cell of the snakes body and adds a new one
+        in front of it, according to the moving direction
         """
         if direction == "Up":
             cur_head_cell = self.the_snake.head.value
@@ -87,13 +91,13 @@ class Snake:
             self.the_snake.add_to_start(new_head_node)
             self.the_snake.remove_last()
 
-    def get_all_coor(self):
+    def get_all_coor(self) -> list[tuple[int, int]]:
         """
         :return: all of the coordinates of the snake as a list[tuple(x,y)]
         """
         return self.the_snake.all_nodes_as_list()
 
-    def get_head(self):
+    def get_head(self) -> tuple[int, int]:
         """
         :return: tuple(x, y) of the snakes head location
         """
