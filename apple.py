@@ -9,22 +9,32 @@ class Apple:
         self.__y = y
         self.__score = score
 
-    def __str__(self):
-        return f'{self.__x}, {self.__y}, {self.__score}'
-
-    def get_apple_score(self):
+    def get_apple_score(self) -> int:
+        """
+        get the score of the apple
+        """
         return self.__score
 
-    def get_location(self):
+    def get_location(self) -> Tuple[int,int]:
+        """
+        get the location of the apple
+        """
+        # todo: docstring
         return self.__x, self.__y
 
-    def get_score_by_loc(self, loc: Tuple[int,int]):
+    def get_score_by_loc(self, loc: Tuple[int,int]) -> int:
+        """
+        get the score of the apple by its location
+        """
         x, y = loc
         if x == self.__x and y == self.__y:
             return self.__score
         return 0
 
-    def move_apple(self):
+    def move_apple(self) -> None:
+        """
+        move the apple location
+        """
         x, y, score = game_parameters.get_random_apple_data()
         self.__x = x
         self.__y = y

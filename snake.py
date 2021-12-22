@@ -1,5 +1,5 @@
 from linked_list import *
-
+# todo: add typing to all
 
 class Snake:
     """

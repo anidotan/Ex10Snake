@@ -1,5 +1,7 @@
 import game_parameters
+# todo: do we need the width and height?
 from game_parameters import get_random_bomb_data, WIDTH, HEIGHT
+from typing import Tuple
 
 
 class Bomb:
@@ -31,9 +33,11 @@ class Bomb:
         self.__time = time
 
     def __str__(self):
+        # todo: do we need this?
         return f'{(self.__x, self.__y, self.__radius, self.__time)}'
 
     def explosion_frames(self):
+        # todo: tryping
         """
         :return: list of lists with the different cells for the blast in each frame
         """
@@ -95,7 +99,7 @@ class Bomb:
 
         return list_all_frames
 
-    def get_location(self):
+    def get_location(self) -> Tuple[int,int]:
         """
         :return: the location of the bomb as a tuple[x: int, y: int]
         """

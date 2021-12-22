@@ -1,3 +1,5 @@
+# todo: what is this?
+# todo: add typing
 # https://medium.com/@kevin.michael.horan/data-structures-linked-lists-with-python-2d0ec4fdc18c
 
 class Node:
@@ -26,6 +28,7 @@ class Linked_list:
                 finished = True
         return list_all
 
+    # todo: take care of this comment
     def __str__(self):  # see if useful - i added and can be deleted
         pointer = self.head
         if self.head is None:

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List, Dict
 
 import game_parameters
 from apple import Apple
@@ -7,7 +7,7 @@ from snake import Snake
 
 
 class Board:
-    def __init__(self, height: int, width: int):
+    def __init__(self, height: int, width: int) -> None:
         self.__height = height
         self.__width = width
         self.__score = 0
@@ -23,7 +23,7 @@ class Board:
         self.__board_dict = {c: [] for c in colors}
         self.__continue_game = True
 
-    def initialize_board(self):
+    def initialize_board(self) -> None:
         """
         create first board-frame
         1. place the snake
@@ -53,18 +53,30 @@ class Board:
                 green_apples = self.__board_dict['green']
                 green_apples.append(apple_location)
 
-    def get_score(self):
+    def get_score(self) -> int:
+        """
+        :return: current score in the game
+        """
         return self.__score
 
-    def get_all_apple_locations(self):
+    def get_all_apple_locations(self) -> List[Tuple[int, int]]:
+        """
+        :return: a list with all apple locations
+        """
         return [apple.get_location() for apple in self.__apple_instances_set]
 
     def can_place_obj(self, loc: Tuple[int, int]) -> bool:
+        """
+        checks if it is possible to place the new object in the game (does not land of anything), returns boolean accordingly
+        """
         return loc not in self.__board_dict['red'] and loc not in \
                self.__board_dict['black'] and loc not in self.__board_dict[
                    'green'] and loc not in self.__board_dict['orange']
 
-    def update_board(self, key):
+    def update_board(self, key: str) -> None:
+        """
+        updates the board according to the key and current state
+        """
         # move snake - no apple
         if self.__eating_counter == 0:
             self.__snake.simple_move(key)
@@ -91,8 +103,9 @@ class Board:
                             apple_placed = True
             self.__board_dict['orange'] = explosion_loc
             self.__board_dict['red'] = []
-        else:  # add new bomb
-            # placed
+        # add new bomb
+        else:
+            # bomb is placed
             while len(self.__board_dict['red']) < 1:
                 new_bomb = Bomb()
                 new_location = new_bomb.get_location()
@@ -114,17 +127,16 @@ class Board:
                 apple_to_remove = apple
                 self.__score += apple.get_apple_score()
 
-        # new apple in case we ate one
+        # add a new apple in case we ate one
         if apple_to_remove is not None:
             self.__apple_instances_set.remove(
-                apple_to_remove)  # removing the old
+                apple_to_remove)  # removing the old apple
 
             # find new apple to add
             apple_placed = False
             while not apple_placed:
                 new_apple = Apple()
                 new_location = new_apple.get_location()
-                # todo - make sure correct - apples finish the game
                 num_cells_in_use = len(self.__board_dict['red']) + len(
                     self.__board_dict['black']) + len(
                     self.__board_dict['orange']) + len(
@@ -173,13 +185,20 @@ class Board:
 
         return self.__continue_game
 
-    def get_board(self):
+    def get_board(self) -> Dict[str, List[Tuple[int, int]]]:
+        """
+        returns the current board
+        :return: current board
+        """
         list_orange_frames = self.__board_dict['orange']
         all_snake_coor = self.__board_dict['black']
+        list_red_frames = self.__board_dict['red']
 
         coor_to_remove = None
         for black_coor in all_snake_coor:
             if black_coor in list_orange_frames:
+                coor_to_remove = black_coor
+            elif black_coor in list_red_frames:
                 coor_to_remove = black_coor
 
         if coor_to_remove is not None:
